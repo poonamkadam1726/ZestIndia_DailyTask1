@@ -35,7 +35,7 @@ namespace Day2_EntityFrameworkCore.Controllers
                 Phone = employeeDTO.Phone,
                 City = employeeDTO.City,
                 DepartmentId = department.Id, // Set the foreign key to the department
-               //departmentName = department.Name
+               
             };
             // Add the new employee to the database context and save changes
             myDbContext.Employees.Add(employee);
@@ -43,5 +43,19 @@ namespace Day2_EntityFrameworkCore.Controllers
             return Ok("Employee registered successfully.");
         }
 
+        [HttpGet]
+        public IActionResult GetEmployees()
+        {
+            var employees = myDbContext.Employees.Include(e => e.Department).ToList();
+            var employeeResponses = employees.Select(e => new EmpoyeeResponseDto
+            {
+                Name = e.Name,
+                Email = e.Email,
+                Phone = e.Phone,
+                City = e.City,
+                DepartmentName = e.Department.Name
+            }).ToList();
+            return Ok(employeeResponses);
+        }
     }
 }
