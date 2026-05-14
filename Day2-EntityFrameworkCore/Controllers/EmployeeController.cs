@@ -57,5 +57,19 @@ namespace Day2_EntityFrameworkCore.Controllers
             }).ToList();
             return Ok(employeeResponses);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteEmployee(int id)
+        {
+            var employee = myDbContext.Employees.FirstOrDefault(e => e.Id == id);
+            if (employee==null)
+            {
+                return BadRequest("Employee not found");
+            }
+            myDbContext.Employees.Remove(employee);
+            myDbContext.SaveChanges();
+            return Ok("Employee deleted successfully.");
+        }
+
     }
 }
