@@ -1,0 +1,6 @@
+@Day2_EntityFrameworkCore_HostAddress = http://localhost:5200
+
+GET {{Day2_EntityFrameworkCore_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
