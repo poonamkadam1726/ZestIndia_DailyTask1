@@ -61,15 +61,34 @@ namespace Day2_EntityFrameworkCore.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteEmployee(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var employee = myDbContext.Employees.FirstOrDefault(e => e.Id == id);
             if (employee==null)
             {
-                return BadRequest("Employee not found");
+                return NotFound("Employee not found");
             }
             myDbContext.Employees.Remove(employee);
             myDbContext.SaveChanges();
             return Ok("Employee deleted successfully.");
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateEmployee(int id,EmployeeDTO employeeDTO)
+        {
+            var employee = myDbContext.Employees.FirstOrDefault(e => e.Id == id);
+            if (employee == null)
+            {
+                return BadRequest("Employee not found");
+            }
+            employee.Name=employeeDTO.Name;
+            employee.Email = employeeDTO.Email;
+            employee.Phone = employeeDTO.Phone;
+            employee.City = employeeDTO.City;
+            myDbContext.SaveChanges();
+            return Ok("Employee updated successfully.");
+        }
     }
 }
