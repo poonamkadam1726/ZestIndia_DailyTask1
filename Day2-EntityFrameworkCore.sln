@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37111.16 d17.14
+VisualStudioVersion = 17.14.37111.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day2-EntityFrameworkCore", "Day2-EntityFrameworkCore\Day2-EntityFrameworkCore.csproj", "{5FE3552B-6321-4932-8032-2C20D3F048AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore", "Day2-EntityFrameworkCore\EntityFrameworkCore.csproj", "{5FE3552B-6321-4932-8032-2C20D3F048AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

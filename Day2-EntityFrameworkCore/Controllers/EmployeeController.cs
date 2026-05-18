@@ -9,7 +9,7 @@ namespace Day2_EntityFrameworkCore.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-         // This allows us to use the database context in our controller actions
+        // This allows us to use the database context in our controller actions
         private readonly MyDbContext myDbContext;
 
         // Constructor injection of MyDbContext
@@ -27,7 +27,7 @@ namespace Day2_EntityFrameworkCore.Controllers
             {
                 return BadRequest($"Department '{employeeDTO.DepartmentName}' not found.");
             }
-            
+
             var employee = new Employee
             {
                 Name = employeeDTO.Name,
@@ -35,7 +35,7 @@ namespace Day2_EntityFrameworkCore.Controllers
                 Phone = employeeDTO.Phone,
                 City = employeeDTO.City,
                 DepartmentId = department.Id, // Set the foreign key to the department
-               
+
             };
             // Add the new employee to the database context and save changes
             myDbContext.Employees.Add(employee);
@@ -50,6 +50,7 @@ namespace Day2_EntityFrameworkCore.Controllers
             var employeeResponses = employees.Select(e => new EmpoyeeResponseDto
             {
                 Name = e.Name,
+                Id = e.Id,
                 Email = e.Email,
                 Phone = e.Phone,
                 City = e.City,
@@ -66,7 +67,7 @@ namespace Day2_EntityFrameworkCore.Controllers
                 return BadRequest(ModelState);
             }
             var employee = myDbContext.Employees.FirstOrDefault(e => e.Id == id);
-            if (employee==null)
+            if (employee == null)
             {
                 return NotFound("Employee not found");
             }
@@ -76,19 +77,35 @@ namespace Day2_EntityFrameworkCore.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateEmployee(int id,EmployeeDTO employeeDTO)
+        public IActionResult UpdateEmployee(int id, EmployeeDTO employeeDTO)
         {
             var employee = myDbContext.Employees.FirstOrDefault(e => e.Id == id);
             if (employee == null)
             {
                 return BadRequest("Employee not found");
             }
-            employee.Name=employeeDTO.Name;
+            employee.Name = employeeDTO.Name;
             employee.Email = employeeDTO.Email;
             employee.Phone = employeeDTO.Phone;
             employee.City = employeeDTO.City;
             myDbContext.SaveChanges();
             return Ok("Employee updated successfully.");
+        }
+
+        [HttpGet("ITDepartmentEmp")]
+        public IActionResult GetEmployeeOnDept()
+        {
+            var employees = myDbContext.Employees.Include(e => e.Department).Where(e => e.Department.Name == "IT").ToList();
+            var employeeResponses = employees.Select(e => new EmpoyeeResponseDto
+            {
+                Name = e.Name,
+                Id = e.Id,
+                Email = e.Email,
+                Phone = e.Phone,
+                City = e.City,
+                DepartmentName = e.Department.Name
+            }).ToList();
+            return Ok(employeeResponses);
         }
     }
 }
