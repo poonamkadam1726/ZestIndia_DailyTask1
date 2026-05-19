@@ -2,6 +2,7 @@ using Day2_EntityFrameworkCore.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,11 +31,12 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
-        )
+        ),
+        RoleClaimType = ClaimTypes.Role
     };
 });
 
-
+builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<MyDbContext>(e =>
     e.UseSqlServer(builder.Configuration.GetConnectionString("DBCS")));
@@ -48,7 +50,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
