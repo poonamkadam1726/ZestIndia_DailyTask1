@@ -8,6 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+//JWT Token
+
 namespace Day2_EntityFrameworkCore.Controllers
 {
     [Route("api/[controller]")]

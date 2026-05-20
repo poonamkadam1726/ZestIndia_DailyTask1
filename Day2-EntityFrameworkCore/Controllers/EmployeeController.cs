@@ -1,10 +1,14 @@
 ﻿using Day2_EntityFrameworkCore.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+//CRUD Operation Web API with Entity Framework Core-One to Many Relationship
+
 namespace Day2_EntityFrameworkCore.Controllers
 {
+    //[EnableCors("MyCorsPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeeController : ControllerBase
@@ -106,6 +110,13 @@ namespace Day2_EntityFrameworkCore.Controllers
                 DepartmentName = e.Department.Name
             }).ToList();
             return Ok(employeeResponses);
+        }
+
+        [HttpGet("MiddlewareDemo")]
+        public IActionResult GetEmployeeUsingMiddleware()
+        {
+           
+            return Ok("Middleware working");
         }
     }
 }

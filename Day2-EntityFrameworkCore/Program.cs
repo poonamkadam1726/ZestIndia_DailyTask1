@@ -1,3 +1,4 @@
+using Day2_EntityFrameworkCore.CustomMiddleware;
 using Day2_EntityFrameworkCore.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -36,12 +37,28 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+//Add CORS Service
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", policy =>
+    {
+        policy.WithOrigins(
+            "http://localhost:3000",
+            "http://localhost:8080",
+            "https://localhost:7297"
+            )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<MyDbContext>(e =>
     e.UseSqlServer(builder.Configuration.GetConnectionString("DBCS")));
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -50,8 +67,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors("MyCorsPolicy");
+
 app.UseAuthentication();
 
 app.UseAuthorization();
