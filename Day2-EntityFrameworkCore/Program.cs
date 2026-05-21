@@ -1,5 +1,6 @@
 using Day2_EntityFrameworkCore.CustomMiddleware;
 using Day2_EntityFrameworkCore.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -54,10 +55,14 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddMediatR(typeof(Program));
+
 builder.Services.AddDbContext<MyDbContext>(e =>
     e.UseSqlServer(builder.Configuration.GetConnectionString("DBCS")));
 
 var app = builder.Build();
+
+
 
 
 // Configure the HTTP request pipeline.
